@@ -1,11 +1,15 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CNAB.Models.Entity
 {
-    public class ServicoPagamento
+    [Table("Pagamento")]
+    public class Pagamento
     {
         public const string TipoRegistro = "1";
         public const string TipoOperacao = "C";
+        
+        public int Id { get; set; }
         public string TipoServico { get; set; }
         public string BancoCodigo { get; set; }
         public string Agencia { get; set; }

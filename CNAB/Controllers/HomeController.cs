@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using CNAB.Models;
@@ -14,7 +16,19 @@ namespace CNAB.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly DatabaseContext _databaseContext;
+
+        public HomeController(DatabaseContext databaseContext)
+        {
+            _databaseContext = databaseContext;
+        }
+        
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult Download()
         {
             var empresa = new Empresa
             {
@@ -35,35 +49,14 @@ namespace CNAB.Controllers
                 EnderecoSiglaEstado = "MG"
             };
 
-            var pagamentos = new List<ServicoPagamento>
-            {
-                new ServicoPagamento
-                {
-                    TipoServico = TipoDeServico.PagamentoSalarios,
-                    BancoCodigo = "077",
-                    Agencia = "0001",
-                    AgenciaDigito = "9",
-                    ContaCorrente = "788371",
-                    ContaCorrenteDigito = "4",
-                    Nome = "CAIO HENRIQUE GALLI DOS SANTOS",
-                    DataPagamento = DateTime.Now,
-                    Valor = 100,
-                    TipoInscricao = TipoDeInscricao.Cpf,
-                    Inscricao = "08477372683",
-                    EnderecoLogradouro = "AVENIDA ANTONIO ABRAHAO CARAM",
-                    EnderecoNumero = "664",
-                    EnderecoComplemento = "SALA 104",
-                    EnderecoBairro = "OURO PRETO",
-                    EnderecoCidade = "BELO HORIZONTE",
-                    EnderecoCep = "31275000",
-                    EnderecoSiglaEstado = "MG"
-                }
-            };
-
             var remessa = new RemessaService(empresa);
-            remessa.AdicionarPagamentos(pagamentos);
-
-            return View(model: remessa.GerarRemessa());
+            remessa.AdicionarPagamentos(_databaseContext.Pagamentos.Where(x => x.BancoCodigo == "77").ToList());
+            
+            var content = new System.IO.MemoryStream(Encoding.ASCII.GetBytes(remessa.GerarRemessa()));
+            var contentType = "text/plain";
+            var fileName = "remessa.txt";
+                
+            return File(content, contentType, fileName);
         }
 
         public IActionResult Privacy()
