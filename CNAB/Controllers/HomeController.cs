@@ -50,7 +50,7 @@ namespace CNAB.Controllers
             };
 
             var remessa = new RemessaService(empresa);
-            remessa.AdicionarPagamentos(_databaseContext.Pagamentos.Where(x => x.BancoCodigo == "77").ToList());
+            remessa.AdicionarPagamentos(_databaseContext.Pagamentos.Where(x => x.BancoCodigo == "77" && x.Ativado == 1).ToList());
             
             var content = new System.IO.MemoryStream(Encoding.ASCII.GetBytes(remessa.GerarRemessa()));
             var contentType = "text/plain";

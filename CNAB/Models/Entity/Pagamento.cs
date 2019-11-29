@@ -28,5 +28,6 @@ namespace CNAB.Models.Entity
         public string EnderecoCidade { get; set; }
         public string EnderecoCep { get; set; }
         public string EnderecoSiglaEstado { get; set; }
+        public int Ativado { get; set; }
     }
 }
