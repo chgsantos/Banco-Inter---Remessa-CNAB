@@ -1,4 +1,5 @@
 using CNAB.Models.Entity;
+using CNAB.Models.EntityConfiguration;
 using Microsoft.EntityFrameworkCore;
 
 namespace CNAB.Models
@@ -12,7 +13,7 @@ namespace CNAB.Models
         
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Pagamento>().HasKey(m => m.Id);
+            builder.ApplyConfiguration(new PagamentoConfiguration());
             base.OnModelCreating(builder);
         }
     }

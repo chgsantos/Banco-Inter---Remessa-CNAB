@@ -54,14 +54,9 @@ namespace CNAB.Controllers
             
             var content = new System.IO.MemoryStream(Encoding.ASCII.GetBytes(remessa.GerarRemessa()));
             var contentType = "text/plain";
-            var fileName = "remessa.txt";
+            var fileName = $"remessa-{DateTime.Now:yyyyMMdd}.txt";
                 
             return File(content, contentType, fileName);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
